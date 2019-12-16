@@ -1,22 +1,32 @@
 import { Test, TestingModule } from '@nestjs/testing';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { AppServiceMock } from './app.service.mock';
+
+const getAppController = async () => {
+  const AppServiceProvider = {
+    provide: AppService,
+    useClass: AppServiceMock
+  };
+  const app: TestingModule = await Test.createTestingModule({
+    controllers: [AppController],
+    providers: [AppServiceProvider]
+  }).compile();
+
+  return app.get<AppController>(AppController);
+};
 
 describe('AppController', () => {
-  let appController: AppController;
+  describe('status', () => {
+    it('should return proper status response', async () => {
+      const appController = await getAppController();
 
-  beforeEach(async () => {
-    const app: TestingModule = await Test.createTestingModule({
-      controllers: [AppController],
-      providers: [AppService]
-    }).compile();
-
-    appController = app.get<AppController>(AppController);
-  });
-
-  describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
+      expect(appController.getServiceStatus()).toEqual({
+        gitHash: 'testGitHash',
+        serviceName: 'testServiceName',
+        version: 'testVersion'
+      });
     });
   });
 });
