@@ -1,5 +1,7 @@
-import * as dotenv from 'dotenv';
 import * as Joi from '@hapi/joi';
+import * as dotenv from 'dotenv';
+
+import { DatabaseType } from 'typeorm';
 
 export type EnvConfig = Record<string, string>;
 
@@ -7,9 +9,35 @@ export interface ValidConfig {
   NODE_ENV: string;
   SERVICE_HOST: string;
   SERVICE_PORT: number;
+  DB_TYPE: DatabaseType;
+  DB_HOST: string;
+  DB_PORT: number;
+  DB_USER: string;
+  DB_PASSWORD: string;
+  DB_NAME: string;
+  DB_SYNCHRONIZE: boolean;
   npm_package_name: string;
   npm_package_gitHead: string;
   npm_package_version: string;
+}
+
+export interface ServiceConfig {
+  env: string;
+  host: string;
+  port: number;
+  name: string;
+  gitHash: string;
+  version: string;
+}
+
+export interface DatabaseConfig {
+  type: DatabaseType;
+  host: string;
+  port: number;
+  username: string;
+  password: string;
+  database: string;
+  synchronize: boolean;
 }
 
 export class ConfigService {
@@ -18,6 +46,13 @@ export class ConfigService {
     NODE_ENV: Joi.string().default('local'),
     SERVICE_HOST: Joi.string().default('0.0.0.0'),
     SERVICE_PORT: Joi.number().default(3000),
+    DB_TYPE: Joi.string().default('postgres'),
+    DB_HOST: Joi.string().default('127.0.0.1'),
+    DB_PORT: Joi.number().default(5432),
+    DB_USER: Joi.string(),
+    DB_PASSWORD: Joi.string().allow(''),
+    DB_NAME: Joi.string(),
+    DB_SYNCHRONIZE: Joi.boolean().default(true),
     npm_package_name: Joi.string(),
     npm_package_gitHead: Joi.string(),
     npm_package_version: Joi.string()
@@ -38,27 +73,26 @@ export class ConfigService {
     return value;
   }
 
-  get env(): string {
-    return this.config.NODE_ENV;
+  get service(): ServiceConfig {
+    return {
+      env: this.config.NODE_ENV,
+      host: this.config.SERVICE_HOST,
+      port: this.config.SERVICE_PORT,
+      name: this.config.npm_package_name,
+      gitHash: this.config.npm_package_gitHead,
+      version: this.config.npm_package_version
+    };
   }
 
-  get serviceHost(): string {
-    return this.config.SERVICE_HOST;
-  }
-
-  get servicePort(): number {
-    return this.config.SERVICE_PORT;
-  }
-
-  get serviceName(): string {
-    return this.config.npm_package_name;
-  }
-
-  get gitHash(): string {
-    return this.config.npm_package_gitHead;
-  }
-
-  get serviceVersion(): string {
-    return this.config.npm_package_version;
+  get db(): DatabaseConfig {
+    return {
+      type: this.config.DB_TYPE,
+      host: this.config.DB_HOST,
+      port: this.config.DB_PORT,
+      username: this.config.DB_USER,
+      password: this.config.DB_PASSWORD,
+      database: this.config.DB_NAME,
+      synchronize: this.config.DB_SYNCHRONIZE
+    };
   }
 }

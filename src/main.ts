@@ -1,10 +1,11 @@
-import { NestFactory } from '@nestjs/core';
 import {
   FastifyAdapter,
   NestFastifyApplication
 } from '@nestjs/platform-fastify';
+
 import { AppModule } from './app.module';
 import { ConfigService } from './config/config.service';
+import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 
 async function bootstrap() {
@@ -21,6 +22,6 @@ async function bootstrap() {
     })
   );
 
-  await app.listen(config.servicePort, config.serviceHost);
+  await app.listen(config.service.port, config.service.host);
 }
 bootstrap();
