@@ -1,6 +1,7 @@
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 
 import { ConfigService } from '../config/config.service';
+import { DBNamingStrategy } from './db-naming.strategy';
 import { Injectable } from '@nestjs/common';
 
 @Injectable()
@@ -14,6 +15,7 @@ export class DBConfigService implements TypeOrmOptionsFactory {
     const config = this.config.db;
     return {
       ...config,
+      namingStrategy: new DBNamingStrategy(),
       type: 'postgres' as 'postgres',
       entities: [`${__dirname}/entities/*{.ts,.js}`],
       migrations: [`${__dirname}/migrations/*.ts,.js`],

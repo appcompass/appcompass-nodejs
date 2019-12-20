@@ -16,6 +16,7 @@ export interface ValidConfig {
   DB_PASSWORD: string;
   DB_NAME: string;
   DB_SYNCHRONIZE: boolean;
+  AUTH_SECRET: string;
   npm_package_name: string;
   npm_package_gitHead: string;
   npm_package_version: string;
@@ -40,6 +41,10 @@ export interface DatabaseConfig {
   synchronize: boolean;
 }
 
+export interface AuthConfig {
+  secret: string;
+}
+
 export class ConfigService {
   private readonly config: ValidConfig;
   private schema: Joi.ObjectSchema = Joi.object({
@@ -53,6 +58,7 @@ export class ConfigService {
     DB_PASSWORD: Joi.string().allow(''),
     DB_NAME: Joi.string(),
     DB_SYNCHRONIZE: Joi.boolean().default(true),
+    AUTH_SECRET: Joi.string(),
     npm_package_name: Joi.string(),
     npm_package_gitHead: Joi.string(),
     npm_package_version: Joi.string()
@@ -93,6 +99,12 @@ export class ConfigService {
       password: this.config.DB_PASSWORD,
       database: this.config.DB_NAME,
       synchronize: this.config.DB_SYNCHRONIZE
+    };
+  }
+
+  get auth(): AuthConfig {
+    return {
+      secret: this.config.AUTH_SECRET
     };
   }
 }
