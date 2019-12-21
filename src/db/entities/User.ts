@@ -1,6 +1,14 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  PrimaryGeneratedColumn
+} from 'typeorm';
 
 import { CreatedUpdatedDates } from '../embeded-entities/CreatedUpdatedDates';
+import { Permission } from './Permission';
+import { Role } from './Role';
 
 @Entity('users')
 export class User {
@@ -13,23 +21,51 @@ export class User {
     unique: true,
     nullable: false
   })
-  email: string;
+  public email: string;
 
   @Column({ type: 'varchar', length: 255, nullable: false })
-  password: string;
+  public password: string;
 
   @Column({ type: 'boolean', default: false, nullable: false })
-  active: boolean;
+  public active: boolean;
 
   @Column({ type: 'varchar', length: 64 })
-  activationCode: string;
+  public activationCode: string;
 
   @Column({ type: 'timestamp' })
-  activatedAt: Date;
+  public activatedAt: Date;
 
   @Column({ type: 'timestamp' })
-  lastLogin: Date;
+  public lastLogin: Date;
 
   @Column(() => CreatedUpdatedDates, { prefix: '' })
-  at: CreatedUpdatedDates;
+  public at: CreatedUpdatedDates;
+
+  @ManyToMany(() => Permission, permission => permission.users)
+  @JoinTable({
+    name: 'user_permission',
+    joinColumn: {
+      name: 'user_id',
+      referencedColumnName: 'id'
+    },
+    inverseJoinColumn: {
+      name: 'permission_id',
+      referencedColumnName: 'id'
+    }
+  })
+  public permissions: Permission[];
+
+  @ManyToMany(() => Role, role => role.users)
+  @JoinTable({
+    name: 'user_role',
+    joinColumn: {
+      name: 'user_id',
+      referencedColumnName: 'id'
+    },
+    inverseJoinColumn: {
+      name: 'role_id',
+      referencedColumnName: 'id'
+    }
+  })
+  public roles: Role[];
 }

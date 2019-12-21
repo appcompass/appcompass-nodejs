@@ -2,17 +2,20 @@ import {
   Column,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   PrimaryGeneratedColumn
 } from 'typeorm';
 
 import { CreatedUpdatedDates } from '../embeded-entities/CreatedUpdatedDates';
 import { Permission } from './Permission';
+import { User } from './User';
 
 @Entity('roles')
 export class Role {
   @PrimaryGeneratedColumn()
-  id: number;
+  public id: number;
 
   @Column({
     type: 'varchar',
@@ -20,18 +23,35 @@ export class Role {
     unique: true,
     nullable: false
   })
-  name: string;
+  public name: string;
 
   @Column({ type: 'varchar', length: 255, nullable: false })
-  label: string;
+  public label: string;
 
   @Column({ type: 'text', nullable: false })
-  description: string;
+  public description: string;
 
   @ManyToOne(() => Permission, permission => permission.assignableRoles)
   @JoinColumn({ name: 'assignable_by_id' })
-  assignableBy: Permission;
+  public assignableBy: Permission;
+
+  @ManyToMany(() => Permission, permission => permission.roles)
+  @JoinTable({
+    name: 'role_permission',
+    joinColumn: {
+      name: 'role_id',
+      referencedColumnName: 'id'
+    },
+    inverseJoinColumn: {
+      name: 'permission_id',
+      referencedColumnName: 'id'
+    }
+  })
+  public permissions: Permission[];
+
+  @ManyToMany(() => User, user => user.roles)
+  public users: User[];
 
   @Column(() => CreatedUpdatedDates, { prefix: '' })
-  at: CreatedUpdatedDates;
+  public at: CreatedUpdatedDates;
 }
