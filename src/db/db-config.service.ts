@@ -17,9 +17,9 @@ export class DBConfigService implements TypeOrmOptionsFactory {
       ...config,
       namingStrategy: new DBNamingStrategy(),
       type: 'postgres' as 'postgres',
-      entities: [`${__dirname}/entities/*{.ts,.js}`],
-      migrations: [`${__dirname}/migrations/*.ts,.js`],
-      subscribers: [`${__dirname}/subscribers/*.{ts,js}`],
+      entities: [`${__dirname}/**/*.entity.ts`],
+      migrations: [`${__dirname}/migrations/*.ts`],
+      subscribers: [`${__dirname}/subscribers/*.ts`],
       cli: {
         entitiesDir: 'src/db/entities',
         migrationsDir: 'src/db/migrations',
