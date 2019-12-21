@@ -8,9 +8,9 @@ import {
   PrimaryGeneratedColumn
 } from 'typeorm';
 
-import { CreatedUpdatedDates } from '../embeded-entities/CreatedUpdatedDates';
-import { Permission } from './Permission';
-import { User } from './User';
+import { CreatedUpdatedDates } from '../embeded-entities/created-updated-dates';
+import { Permission } from './permission.entity';
+import { User } from './user.entity';
 
 @Entity('roles')
 export class Role {

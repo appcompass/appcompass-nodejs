@@ -6,9 +6,9 @@ import {
   PrimaryGeneratedColumn
 } from 'typeorm';
 
-import { CreatedUpdatedDates } from '../embeded-entities/CreatedUpdatedDates';
-import { Permission } from './Permission';
-import { Role } from './Role';
+import { CreatedUpdatedDates } from '../embeded-entities/created-updated-dates';
+import { Permission } from './permission.entity';
+import { Role } from './role.entity';
 
 @Entity('users')
 export class User {
@@ -55,7 +55,7 @@ export class User {
   })
   public permissions: Permission[];
 
-  @ManyToMany(() => Role, role => role.users)
+  @ManyToMany(() => Role)
   @JoinTable({
     name: 'user_role',
     joinColumn: {
