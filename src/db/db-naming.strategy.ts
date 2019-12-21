@@ -4,23 +4,63 @@ import { snakeCase } from 'lodash';
 
 export class DBNamingStrategy extends DefaultNamingStrategy
   implements NamingStrategyInterface {
-  tableName(targetName: string, userSpecifiedName: string): string {
-    return userSpecifiedName ? userSpecifiedName : snakeCase(targetName);
-  }
-
   columnName(propertyName: string, customName: string): string {
     return customName ? customName : snakeCase(propertyName);
-  }
-
-  columnNameCustomized(customName: string): string {
-    return customName;
   }
 
   relationName(propertyName: string): string {
     return snakeCase(propertyName);
   }
 
+  primaryKeyName(tableOrName: Table | string, columnNames: string[]): string {
+    return this.createNameFromTableColumns(tableOrName, columnNames, 'pkey');
+  }
+
+  uniqueConstraintName(
+    tableOrName: Table | string,
+    columnNames: string[]
+  ): string {
+    return this.createNameFromTableColumns(tableOrName, columnNames, 'unique');
+  }
+
+  relationConstraintName(
+    tableOrName: Table | string,
+    columnNames: string[],
+    where?: string
+  ): string {
+    const suffix = where ? `relation_${where}` : 'relation';
+    return this.createNameFromTableColumns(tableOrName, columnNames, suffix);
+  }
+
+  defaultConstraintName(
+    tableOrName: Table | string,
+    columnName: string
+  ): string {
+    return this.createNameFromTableColumns(
+      tableOrName,
+      [columnName],
+      'default_constraint'
+    );
+  }
+
   foreignKeyName(tableOrName: Table | string, columnNames: string[]): string {
+    return this.createNameFromTableColumns(tableOrName, columnNames, 'foreign');
+  }
+
+  indexName(
+    tableOrName: Table | string,
+    columnNames: string[],
+    where?: string
+  ): string {
+    const suffix = where ? `index_${where}` : 'index';
+    return this.createNameFromTableColumns(tableOrName, columnNames, suffix);
+  }
+
+  private createNameFromTableColumns(
+    tableOrName: Table | string,
+    columnNames: string[],
+    suffix: string
+  ) {
     const clonedColumnNames = [...columnNames];
 
     clonedColumnNames.sort();
@@ -29,6 +69,6 @@ export class DBNamingStrategy extends DefaultNamingStrategy
     const replacedTableName = table.replace('.', '_');
     const replacedColumnNames = clonedColumnNames.join('_');
 
-    return `${replacedTableName}_${replacedColumnNames}_foreign`.toLowerCase();
+    return `${replacedTableName}_${replacedColumnNames}_${suffix}`.toLowerCase();
   }
 }
