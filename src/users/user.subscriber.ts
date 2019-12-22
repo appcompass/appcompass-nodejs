@@ -1,11 +1,11 @@
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
-
-import { EntitySubscriberInterface, InsertEvent, Connection } from 'typeorm';
+import { Connection, EntitySubscriberInterface, InsertEvent } from 'typeorm';
 
 import { Injectable } from '@nestjs/common';
-import { User } from './user.entity';
 import { InjectConnection } from '@nestjs/typeorm';
+
+import { User } from './user.entity';
 
 @Injectable()
 export class UserSubscriber implements EntitySubscriberInterface<User> {

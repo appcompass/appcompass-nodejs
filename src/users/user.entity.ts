@@ -41,7 +41,10 @@ export class User {
   @Column(() => CreatedUpdatedDates, { prefix: '' })
   public at: CreatedUpdatedDates;
 
-  @ManyToMany(() => Permission, permission => permission.users)
+  @ManyToMany(
+    () => Permission,
+    permission => permission.users
+  )
   @JoinTable({
     name: 'user_permission',
     joinColumn: {

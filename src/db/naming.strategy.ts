@@ -1,6 +1,5 @@
-import { DefaultNamingStrategy, NamingStrategyInterface, Table } from 'typeorm';
-
 import { snakeCase } from 'lodash';
+import { DefaultNamingStrategy, NamingStrategyInterface, Table } from 'typeorm';
 
 export class DBNamingStrategy extends DefaultNamingStrategy
   implements NamingStrategyInterface {

@@ -1,7 +1,7 @@
-import * as Joi from '@hapi/joi';
 import * as dotenv from 'dotenv';
-
 import { DatabaseType } from 'typeorm';
+
+import * as Joi from '@hapi/joi';
 
 export type EnvConfig = Record<string, string>;
 

@@ -1,14 +1,14 @@
+import { Injectable } from '@nestjs/common';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 
 import { ConfigService } from '../config/config.service';
-import { DBNamingStrategy } from './naming.strategy';
-import { Injectable } from '@nestjs/common';
 import { Permission } from '../permissions/permission.entity';
-import { Role } from '../roles/role.entity';
 import { RolePermission } from '../roles/role-permission.entity';
-import { User } from '../users/user.entity';
+import { Role } from '../roles/role.entity';
 import { UserPermission } from '../users/user-permission.entity';
 import { UserRole } from '../users/user-role.entity';
+import { User } from '../users/user.entity';
+import { DBNamingStrategy } from './naming.strategy';
 
 @Injectable()
 export class DBConfigService implements TypeOrmOptionsFactory {

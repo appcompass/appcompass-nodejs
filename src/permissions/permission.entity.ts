@@ -34,20 +34,35 @@ export class Permission {
   @Column({ type: 'boolean', default: false, nullable: false })
   public system: number;
 
-  @ManyToOne(() => Permission, permission => permission.assignablePermissions)
+  @ManyToOne(
+    () => Permission,
+    permission => permission.assignablePermissions
+  )
   @JoinColumn({ name: 'assignable_by_id' })
   public assignableBy: Permission;
 
-  @OneToMany(() => Permission, permission => permission.assignableBy)
+  @OneToMany(
+    () => Permission,
+    permission => permission.assignableBy
+  )
   public assignablePermissions: Permission[];
 
-  @OneToMany(() => Role, role => role.assignableBy)
+  @OneToMany(
+    () => Role,
+    role => role.assignableBy
+  )
   public assignableRoles: Role[];
 
-  @ManyToMany(() => User, user => user.permissions)
+  @ManyToMany(
+    () => User,
+    user => user.permissions
+  )
   public users: User[];
 
-  @ManyToMany(() => Role, role => role.permissions)
+  @ManyToMany(
+    () => Role,
+    role => role.permissions
+  )
   public roles: Role[];
 
   @Column(() => CreatedUpdatedDates, { prefix: '' })
