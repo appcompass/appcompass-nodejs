@@ -6,9 +6,9 @@ import {
   PrimaryGeneratedColumn
 } from 'typeorm';
 
-import { CreatedUpdatedDates } from '../embeded-entities/created-updated-dates';
-import { Permission } from './permission.entity';
-import { Role } from './role.entity';
+import { CreatedUpdatedDates } from '../db/embeded-entities/created-updated-dates';
+import { Permission } from '../permissions/permission.entity';
+import { Role } from '../roles/role.entity';
 
 @Entity('users')
 export class User {
@@ -32,10 +32,10 @@ export class User {
   @Column({ type: 'varchar', length: 64 })
   public activationCode: string;
 
-  @Column({ type: 'timestamp' })
+  @Column({ type: 'timestamp', nullable: true })
   public activatedAt: Date;
 
-  @Column({ type: 'timestamp' })
+  @Column({ type: 'timestamp', nullable: true })
   public lastLogin: Date;
 
   @Column(() => CreatedUpdatedDates, { prefix: '' })

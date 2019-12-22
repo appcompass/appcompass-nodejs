@@ -1,11 +1,26 @@
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 
 import { ConfigService } from '../config/config.service';
-import { DBNamingStrategy } from './db-naming.strategy';
+import { DBNamingStrategy } from './naming.strategy';
 import { Injectable } from '@nestjs/common';
+import { Permission } from '../permissions/permission.entity';
+import { Role } from '../roles/role.entity';
+import { RolePermission } from '../roles/role-permission.entity';
+import { User } from '../users/user.entity';
+import { UserPermission } from '../users/user-permission.entity';
+import { UserRole } from '../users/user-role.entity';
 
 @Injectable()
 export class DBConfigService implements TypeOrmOptionsFactory {
+  private entities: any[] = [
+    User,
+    Role,
+    Permission,
+    UserRole,
+    UserPermission,
+    RolePermission
+  ];
+
   constructor(private readonly config: ConfigService = null) {}
   createTypeOrmOptions(): TypeOrmModuleOptions {
     return this.configuration;
@@ -17,9 +32,8 @@ export class DBConfigService implements TypeOrmOptionsFactory {
       ...config,
       namingStrategy: new DBNamingStrategy(),
       type: 'postgres' as 'postgres',
-      entities: [`${__dirname}/**/*.entity.ts`],
-      migrations: [`${__dirname}/migrations/*.ts`],
-      subscribers: [`${__dirname}/subscribers/*.ts`],
+      entities: this.entities,
+      migrations: [`${__dirname}/migrations/*`],
       cli: {
         entitiesDir: 'src/db/entities',
         migrationsDir: 'src/db/migrations',
