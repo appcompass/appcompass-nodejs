@@ -22,6 +22,12 @@ export class UsersService {
   }
 
   async create(user: CreateUserPayload | User): Promise<User> {
+    const check = await this.userRepository.findOne({ email: user.email });
+    if (check) throw new Error('user exists!'); // needs to be properly handled.
+    return this.userRepository.save(user);
+  }
+
+  async save(user: User): Promise<User> {
     return this.userRepository.save(user);
   }
 }

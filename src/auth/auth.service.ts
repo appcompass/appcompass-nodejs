@@ -1,4 +1,5 @@
 import * as bcrypt from 'bcrypt';
+import * as moment from 'moment';
 import { User } from 'src/users/user.entity';
 
 import { Injectable } from '@nestjs/common';
@@ -26,6 +27,10 @@ export class AuthService {
     const { id, email } = user;
     const payload = { email, sub: id };
     const token = await this.jwtService.signAsync(payload);
+
+    user.lastLogin = moment();
+    this.usersService.save(user);
+
     return { token };
   }
 }
