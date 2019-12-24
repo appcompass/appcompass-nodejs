@@ -1,3 +1,5 @@
+import { Moment } from 'moment';
+import { DateTransformer } from 'src/db/transformers/date.transformer';
 import {
   Column,
   Entity,
@@ -32,11 +34,19 @@ export class User {
   @Column({ type: 'varchar', length: 64 })
   public activationCode: string;
 
-  @Column({ type: 'timestamp', nullable: true })
-  public activatedAt: Date;
+  @Column({
+    type: 'timestamp',
+    nullable: true,
+    transformer: new DateTransformer()
+  })
+  public activatedAt: Moment;
 
-  @Column({ type: 'timestamp', nullable: true })
-  public lastLogin: Date;
+  @Column({
+    type: 'timestamp',
+    nullable: true,
+    transformer: new DateTransformer()
+  })
+  public lastLogin: Moment;
 
   @Column(() => CreatedUpdatedDates, { prefix: '' })
   public at: CreatedUpdatedDates;

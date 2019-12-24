@@ -1,9 +1,12 @@
+import { Moment } from 'moment';
 import { CreateDateColumn, UpdateDateColumn } from 'typeorm';
 
-export class CreatedUpdatedDates {
-  @CreateDateColumn({ name: 'created_at' })
-  created: Date;
+import { DateTransformer } from '../transformers/date.transformer';
 
-  @UpdateDateColumn({ name: 'updated_at' })
-  updated: Date;
+export class CreatedUpdatedDates {
+  @CreateDateColumn({ name: 'created_at', transformer: new DateTransformer() })
+  created: Moment;
+
+  @UpdateDateColumn({ name: 'updated_at', transformer: new DateTransformer() })
+  updated: Moment;
 }
