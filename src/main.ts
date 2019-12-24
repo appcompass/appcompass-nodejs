@@ -1,4 +1,10 @@
-import { ValidationPipe } from '@nestjs/common';
+import { useContainer } from 'class-validator';
+
+import {
+  UnprocessableEntityException,
+  ValidationError,
+  ValidationPipe
+} from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import {
   FastifyAdapter,
@@ -13,12 +19,15 @@ async function bootstrap() {
     AppModule,
     new FastifyAdapter()
   );
-  const config = app.get(ConfigService);
+  useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
+  const config = app.get(ConfigService);
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
-      whitelist: true
+      whitelist: true,
+      exceptionFactory: (errors: ValidationError[]) =>
+        new UnprocessableEntityException(errors, 'Validation Error')
     })
   );
 

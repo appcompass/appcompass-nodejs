@@ -27,6 +27,5 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
       .digest('hex');
 
     user.password = await bcrypt.hash(user.password, this.saltRounds);
-    console.log('BEFORE POST INSERTED: ', event.entity);
   }
 }
