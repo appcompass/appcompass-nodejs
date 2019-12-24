@@ -17,6 +17,7 @@ export interface ValidConfig {
   DB_NAME: string;
   DB_SYNCHRONIZE: boolean;
   AUTH_SECRET: string;
+  AUTH_EXPIRES_IN: number;
   npm_package_name: string;
   npm_package_gitHead: string;
   npm_package_version: string;
@@ -29,20 +30,6 @@ export interface ServiceConfig {
   name: string;
   gitHash: string;
   version: string;
-}
-
-export interface DatabaseConfig {
-  type: DatabaseType;
-  host: string;
-  port: number;
-  username: string;
-  password: string;
-  database: string;
-  synchronize: boolean;
-}
-
-export interface AuthConfig {
-  secret: string;
 }
 
 export class ConfigService {
@@ -59,6 +46,7 @@ export class ConfigService {
     DB_NAME: Joi.string(),
     DB_SYNCHRONIZE: Joi.boolean().default(true),
     AUTH_SECRET: Joi.string(),
+    AUTH_EXPIRES_IN: Joi.number(),
     npm_package_name: Joi.string(),
     npm_package_gitHead: Joi.string(),
     npm_package_version: Joi.string()
@@ -79,32 +67,7 @@ export class ConfigService {
     return value;
   }
 
-  get service(): ServiceConfig {
-    return {
-      env: this.config.NODE_ENV,
-      host: this.config.SERVICE_HOST,
-      port: this.config.SERVICE_PORT,
-      name: this.config.npm_package_name,
-      gitHash: this.config.npm_package_gitHead,
-      version: this.config.npm_package_version
-    };
-  }
-
-  get db(): DatabaseConfig {
-    return {
-      type: this.config.DB_TYPE,
-      host: this.config.DB_HOST,
-      port: this.config.DB_PORT,
-      username: this.config.DB_USER,
-      password: this.config.DB_PASSWORD,
-      database: this.config.DB_NAME,
-      synchronize: this.config.DB_SYNCHRONIZE
-    };
-  }
-
-  get auth(): AuthConfig {
-    return {
-      secret: this.config.AUTH_SECRET
-    };
+  public get<K extends keyof ValidConfig>(key: K): ValidConfig[K] {
+    return this.config[key];
   }
 }

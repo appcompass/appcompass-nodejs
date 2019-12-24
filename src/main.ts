@@ -1,4 +1,6 @@
 import { useContainer } from 'class-validator';
+import * as rateLimit from 'fastify-rate-limit';
+import * as helmet from 'helmet';
 
 import {
   UnprocessableEntityException,
@@ -21,7 +23,7 @@ async function bootstrap() {
   );
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
 
-  const config = app.get(ConfigService);
+  const configService = app.get(ConfigService);
   app.useGlobalPipes(
     new ValidationPipe({
       transform: true,
@@ -30,7 +32,16 @@ async function bootstrap() {
         new UnprocessableEntityException(errors, 'Validation Error')
     })
   );
+  app.enableCors();
+  app.use(helmet());
+  app.register(rateLimit, {
+    max: 150,
+    timeWindow: 1000 * 60 * 5
+  });
 
-  await app.listen(config.service.port, config.service.host);
+  await app.listen(
+    configService.get('SERVICE_PORT'),
+    configService.get('SERVICE_HOST')
+  );
 }
 bootstrap();

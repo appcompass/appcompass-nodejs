@@ -2,21 +2,15 @@ import { Injectable } from '@nestjs/common';
 
 import { ConfigService } from './config/config.service';
 
-export interface StatusResponse {
-  serviceName: string;
-  gitHash: string;
-  version: string;
-}
-
 @Injectable()
 export class AppService {
-  constructor(private readonly config: ConfigService) {}
+  constructor(private readonly configService: ConfigService) {}
 
-  getStatus(): StatusResponse {
+  getStatus() {
     return {
-      serviceName: this.config.service.name,
-      gitHash: this.config.service.gitHash,
-      version: this.config.service.version
+      serviceName: this.configService.get('npm_package_name'),
+      gitHash: this.configService.get('npm_package_gitHead'),
+      version: this.configService.get('npm_package_version')
     };
   }
 }

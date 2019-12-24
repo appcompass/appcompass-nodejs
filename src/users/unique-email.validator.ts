@@ -12,7 +12,7 @@ import { UsersService } from './users.service';
 export class IsEmailAlreadyUsed implements ValidatorConstraintInterface {
   constructor(protected readonly usersService: UsersService) {}
   async validate(email: string) {
-    const user = await this.usersService.findByEmail(email);
+    const user = await this.usersService.findBy({ email });
     return !user;
   }
 }

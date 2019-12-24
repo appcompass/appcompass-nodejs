@@ -1,3 +1,5 @@
+import { ConnectionOptions } from 'typeorm';
+
 import { Injectable } from '@nestjs/common';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 
@@ -12,7 +14,7 @@ import { DBNamingStrategy } from './naming.strategy';
 
 @Injectable()
 export class DBConfigService implements TypeOrmOptionsFactory {
-  private entities: any[] = [
+  private entities: Function[] = [
     User,
     Role,
     Permission,
@@ -21,17 +23,22 @@ export class DBConfigService implements TypeOrmOptionsFactory {
     RolePermission
   ];
 
-  constructor(private readonly config: ConfigService = null) {}
+  constructor(private readonly configService: ConfigService) {}
+
   createTypeOrmOptions(): TypeOrmModuleOptions {
-    return this.configuration;
+    return this.config;
   }
 
-  get configuration() {
-    const config = this.config.db;
+  get config() {
     return {
-      ...config,
+      type: this.configService.get('DB_TYPE'),
+      host: this.configService.get('DB_HOST'),
+      port: this.configService.get('DB_PORT'),
+      username: this.configService.get('DB_USER'),
+      password: this.configService.get('DB_PASSWORD'),
+      database: this.configService.get('DB_NAME'),
+      synchronize: this.configService.get('DB_SYNCHRONIZE'),
       namingStrategy: new DBNamingStrategy(),
-      type: 'postgres' as 'postgres',
       entities: this.entities,
       migrations: [`${__dirname}/migrations/*`],
       cli: {
@@ -39,6 +46,6 @@ export class DBConfigService implements TypeOrmOptionsFactory {
         migrationsDir: 'src/db/migrations',
         subscribersDir: 'src/db/subscribers'
       }
-    };
+    } as ConnectionOptions;
   }
 }
