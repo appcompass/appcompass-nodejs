@@ -3,8 +3,8 @@ import { FindConditions, Repository } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
-import { CreateUserPayload } from './dto/create-user.dto';
-import { User } from './user.entity';
+import { CreateUserPayload } from '../dto/create-user.dto';
+import { User } from '../entities/user.entity';
 
 @Injectable()
 export class UsersService {

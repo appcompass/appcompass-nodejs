@@ -2,18 +2,18 @@ import {
   Column,
   Entity,
   JoinColumn,
-  JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn
 } from 'typeorm';
 
-import { CreatedUpdatedDates } from '../db/embeded-entities/created-updated-dates';
-import { Permission } from '../permissions/permission.entity';
-import { User } from '../users/user.entity';
+import { CreatedUpdatedDates } from '../../db/embeded-entities/created-updated-dates';
+import { Role } from './role.entity';
+import { User } from './user.entity';
 
-@Entity('roles')
-export class Role {
+@Entity('permissions')
+export class Permission {
   @PrimaryGeneratedColumn()
   public id: number;
 
@@ -31,35 +31,39 @@ export class Role {
   @Column({ type: 'text', nullable: false })
   public description: string;
 
+  @Column({ type: 'boolean', default: false, nullable: false })
+  public system: number;
+
   @ManyToOne(
     () => Permission,
-    permission => permission.assignableRoles
+    permission => permission.assignablePermissions
   )
   @JoinColumn({ name: 'assignable_by_id' })
   public assignableBy: Permission;
 
-  @ManyToMany(
+  @OneToMany(
     () => Permission,
-    permission => permission.roles
+    permission => permission.assignableBy
   )
-  @JoinTable({
-    name: 'role_permission',
-    joinColumn: {
-      name: 'role_id',
-      referencedColumnName: 'id'
-    },
-    inverseJoinColumn: {
-      name: 'permission_id',
-      referencedColumnName: 'id'
-    }
-  })
-  public permissions: Permission[];
+  public assignablePermissions: Permission[];
+
+  @OneToMany(
+    () => Role,
+    role => role.assignableBy
+  )
+  public assignableRoles: Role[];
 
   @ManyToMany(
     () => User,
-    user => user.roles
+    user => user.permissions
   )
   public users: User[];
+
+  @ManyToMany(
+    () => Role,
+    role => role.permissions
+  )
+  public roles: Role[];
 
   @Column(() => CreatedUpdatedDates, { prefix: '' })
   public at: CreatedUpdatedDates;

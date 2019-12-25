@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryColumn } from 'typeorm';
 
-import { CreatedUpdatedDates } from '../db/embeded-entities/created-updated-dates';
+import { CreatedUpdatedDates } from '../../db/embeded-entities/created-updated-dates';
 
 @Entity('role_permission')
 export class RolePermission {

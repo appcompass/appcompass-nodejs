@@ -1,11 +1,11 @@
 import * as bcrypt from 'bcrypt';
 import * as moment from 'moment';
-import { User } from 'src/users/user.entity';
+import { User } from 'src/auth/entities/user.entity';
 
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
-import { UsersService } from '../users/users.service';
+import { UsersService } from './users.service';
 
 @Injectable()
 export class AuthService {
@@ -32,5 +32,9 @@ export class AuthService {
     this.usersService.save(user);
 
     return { token };
+  }
+
+  async logout(user: User) {
+    user; // handle logout flow.  blacklist maybe?
   }
 }

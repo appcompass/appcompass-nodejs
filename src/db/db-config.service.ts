@@ -3,13 +3,13 @@ import { ConnectionOptions } from 'typeorm';
 import { Injectable } from '@nestjs/common';
 import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 
+import { Permission } from '../auth/entities/permission.entity';
+import { RolePermission } from '../auth/entities/role-permission.entity';
+import { Role } from '../auth/entities/role.entity';
+import { UserPermission } from '../auth/entities/user-permission.entity';
+import { UserRole } from '../auth/entities/user-role.entity';
+import { User } from '../auth/entities/user.entity';
 import { ConfigService } from '../config/config.service';
-import { Permission } from '../permissions/permission.entity';
-import { RolePermission } from '../roles/role-permission.entity';
-import { Role } from '../roles/role.entity';
-import { UserPermission } from '../users/user-permission.entity';
-import { UserRole } from '../users/user-role.entity';
-import { User } from '../users/user.entity';
 import { DBNamingStrategy } from './naming.strategy';
 
 @Injectable()
