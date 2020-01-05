@@ -31,6 +31,10 @@ export class DBConfigService implements TypeOrmOptionsFactory {
 
   get config() {
     return {
+      logging:
+        this.configService.get('NODE_ENV') === 'production'
+          ? ['error', 'schema', 'warn']
+          : 'all',
       type: this.configService.get('DB_TYPE'),
       host: this.configService.get('DB_HOST'),
       port: this.configService.get('DB_PORT'),
@@ -40,7 +44,7 @@ export class DBConfigService implements TypeOrmOptionsFactory {
       synchronize: this.configService.get('DB_SYNCHRONIZE'),
       namingStrategy: new DBNamingStrategy(),
       entities: this.entities,
-      migrations: [`${__dirname}/migrations/*`],
+      migrations: [`${__dirname}/migrations/*{.js,.ts}`],
       cli: {
         entitiesDir: 'src/db/entities',
         migrationsDir: 'src/db/migrations',

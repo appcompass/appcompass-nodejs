@@ -9,7 +9,9 @@ import {
 } from 'typeorm';
 
 import { CreatedUpdatedDates } from '../../db/embeded-entities/created-updated-dates';
+import { RolePermission } from './role-permission.entity';
 import { Role } from './role.entity';
+import { UserPermission } from './user-permission.entity';
 import { User } from './user.entity';
 
 @Entity('permissions')
@@ -53,17 +55,17 @@ export class Permission {
   )
   public assignableRoles: Role[];
 
-  @ManyToMany(
-    () => User,
-    user => user.permissions
+  @OneToMany(
+    () => UserPermission,
+    userPermission => userPermission.permission
   )
-  public users: User[];
+  public permissionToUsers: UserPermission[];
 
-  @ManyToMany(
-    () => Role,
-    role => role.permissions
+  @OneToMany(
+    () => RolePermission,
+    rolePermission => rolePermission.permission
   )
-  public roles: Role[];
+  public permissionToRoles: RolePermission[];
 
   @Column(() => CreatedUpdatedDates, { prefix: '' })
   public at: CreatedUpdatedDates;

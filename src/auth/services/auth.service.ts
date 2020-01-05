@@ -28,13 +28,12 @@ export class AuthService {
     const payload = { email, sub: id };
     const token = await this.jwtService.signAsync(payload);
 
-    user.lastLogin = moment();
-    this.usersService.save(user);
+    this.usersService.save(id, { lastLogin: moment() });
 
     return { token };
   }
 
   async logout(user: User) {
-    user; // handle logout flow.  blacklist maybe?
+    user; // TODO: handle logout flow.  blacklist maybe?
   }
 }

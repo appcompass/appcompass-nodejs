@@ -1,6 +1,8 @@
-import { Column, Entity, PrimaryColumn } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
 
 import { CreatedUpdatedDates } from '../../db/embeded-entities/created-updated-dates';
+import { Role } from './role.entity';
+import { User } from './user.entity';
 
 @Entity('user_role')
 export class UserRole {
@@ -12,4 +14,16 @@ export class UserRole {
 
   @Column(() => CreatedUpdatedDates, { prefix: '' })
   public at: CreatedUpdatedDates;
+
+  @ManyToOne(
+    () => User,
+    user => user.userToRoles
+  )
+  public user!: User;
+
+  @ManyToOne(
+    () => Role,
+    role => role.roleToUsers
+  )
+  public role!: Role;
 }

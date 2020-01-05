@@ -1,6 +1,11 @@
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
-import { Connection, EntitySubscriberInterface, InsertEvent } from 'typeorm';
+import {
+  Connection,
+  EntitySubscriberInterface,
+  InsertEvent,
+  UpdateEvent
+} from 'typeorm';
 
 import { Injectable } from '@nestjs/common';
 import { InjectConnection } from '@nestjs/typeorm';
@@ -19,13 +24,20 @@ export class UserSubscriber implements EntitySubscriberInterface<User> {
     return User;
   }
 
-  async beforeInsert(event: InsertEvent<User>) {
-    const user = event.entity;
+  async beforeInsert({ entity: user }: InsertEvent<User>) {
     user.activationCode = crypto
       .createHash('sha256')
       .update(user.email)
       .digest('hex');
 
-    user.password = await bcrypt.hash(user.password, this.saltRounds);
+    user.password = await this.setPassword(user.password);
+  }
+
+  async beforeUpdate?({ entity: user }: UpdateEvent<User>) {
+    if (user.password) user.password = await this.setPassword(user.password);
+  }
+
+  private async setPassword(password): Promise<string> {
+    return await bcrypt.hash(password, this.saltRounds);
   }
 }

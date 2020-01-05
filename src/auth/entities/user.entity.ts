@@ -1,16 +1,10 @@
 import { Moment } from 'moment';
 import { DateTransformer } from 'src/db/transformers/date.transformer';
-import {
-  Column,
-  Entity,
-  JoinTable,
-  ManyToMany,
-  PrimaryGeneratedColumn
-} from 'typeorm';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 import { CreatedUpdatedDates } from '../../db/embeded-entities/created-updated-dates';
-import { Permission } from './permission.entity';
-import { Role } from './role.entity';
+import { UserPermission } from './user-permission.entity';
+import { UserRole } from './user-role.entity';
 
 @Entity('users')
 export class User {
@@ -51,34 +45,15 @@ export class User {
   @Column(() => CreatedUpdatedDates, { prefix: '' })
   public at: CreatedUpdatedDates;
 
-  @ManyToMany(
-    () => Permission,
-    permission => permission.users
+  @OneToMany(
+    () => UserPermission,
+    userPermission => userPermission.user
   )
-  @JoinTable({
-    name: 'user_permission',
-    joinColumn: {
-      name: 'user_id',
-      referencedColumnName: 'id'
-    },
-    inverseJoinColumn: {
-      name: 'permission_id',
-      referencedColumnName: 'id'
-    }
-  })
-  public permissions: Permission[];
+  public userToPermissions: UserPermission[];
 
-  @ManyToMany(() => Role)
-  @JoinTable({
-    name: 'user_role',
-    joinColumn: {
-      name: 'user_id',
-      referencedColumnName: 'id'
-    },
-    inverseJoinColumn: {
-      name: 'role_id',
-      referencedColumnName: 'id'
-    }
-  })
-  public roles: Role[];
+  @OneToMany(
+    () => UserRole,
+    userRole => userRole.user
+  )
+  public userToRoles: UserRole[];
 }

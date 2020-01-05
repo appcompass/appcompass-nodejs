@@ -1,6 +1,13 @@
-import { RegisterUserPayload } from 'src/auth/dto/register-user.dto';
+import { RegisterUserPayload } from 'src/auth/dto/auth-register.dto';
 
-import { Body, Controller, Post, Request, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Request,
+  UseGuards
+} from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
 import { AuthService } from '../services/auth.service';
@@ -16,6 +23,7 @@ export class AuthController {
   }
 
   @UseGuards(AuthGuard())
+  @Get('logout')
   logout(@Request() req) {
     return this.authService.logout(req.user);
   }
@@ -33,4 +41,10 @@ export class AuthController {
 
   @Post('reset-password')
   resetPassword() {}
+
+  @UseGuards(AuthGuard())
+  @Get('profile')
+  getProfile(@Request() req) {
+    return req.user;
+  }
 }
