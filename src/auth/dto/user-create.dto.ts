@@ -4,7 +4,7 @@ import { IsEmailUsed } from '../validators/unique-email.validator';
 
 export class CreateUserPayload {
   @IsEmail()
-  @IsEmailUsed()
+  @IsEmailUsed(false)
   readonly email: string;
 
   @IsString()

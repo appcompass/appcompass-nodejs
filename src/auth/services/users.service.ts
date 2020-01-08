@@ -26,15 +26,8 @@ export class UsersService {
     return await this.userRepository.findOne(conditions);
   }
 
-  async create(user: Partial<User>) {
-    return await this.userRepository.save(user);
-  }
-
-  async save(id: number, updateData: Partial<User>) {
-    return await this.userRepository.save(
-      { ...updateData, id: +id },
-      { reload: true }
-    );
+  async save(data: Partial<User>) {
+    return await this.userRepository.save(data);
   }
 
   async delete(id: number) {

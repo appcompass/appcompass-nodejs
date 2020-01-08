@@ -1,15 +1,18 @@
-import { RegisterUserPayload } from 'src/auth/dto/auth-register.dto';
+import { RegisterUserDto } from 'src/auth/dto/auth-register.dto';
 
 import {
   Body,
   Controller,
   Get,
   Post,
+  Query,
   Request,
   UseGuards
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
+import { ForgotPasswordDto } from '../dto/auth-forgot-password.dto';
+import { ResetPasswordDto } from '../dto/auth-reset-password.dto';
 import { AuthService } from '../services/auth.service';
 
 @Controller({ path: 'auth' })
@@ -19,28 +22,34 @@ export class AuthController {
   @UseGuards(AuthGuard('local'))
   @Post('login')
   async login(@Request() req) {
-    return this.authService.login(req.user);
+    return await this.authService.login(req.user);
   }
 
   @UseGuards(AuthGuard())
   @Get('logout')
-  logout(@Request() req) {
-    return this.authService.logout(req.user);
+  async logout(@Request() req) {
+    return await this.authService.logout(req.user);
   }
 
   @Post('register')
-  register(@Body() payload: RegisterUserPayload) {
-    console.log(payload);
+  async register(@Body() payload: RegisterUserDto) {
+    return await this.authService.register(payload);
   }
 
-  @Post('confirm-registration')
-  confirmRegistration() {}
+  @Get('confirm-registration')
+  async confirmRegistration(@Query('code') code: string) {
+    return await this.authService.confirmRegistration(code);
+  }
 
   @Post('forgot-password')
-  forgotPassword() {}
+  async forgotPassword(@Body() { email }: ForgotPasswordDto) {
+    return await this.authService.forgotPassword(email);
+  }
 
   @Post('reset-password')
-  resetPassword() {}
+  async resetPassword(@Body() { code, email, password }: ResetPasswordDto) {
+    return await this.authService.resetPassword({ code, email, password });
+  }
 
   @UseGuards(AuthGuard())
   @Get('profile')

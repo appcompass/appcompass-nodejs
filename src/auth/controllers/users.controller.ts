@@ -25,7 +25,7 @@ export class UsersController {
   @UseGuards(AuthGuard())
   @Post()
   async create(@Body() payload: CreateUserPayload) {
-    return this.usersService.create(payload);
+    return this.usersService.save(payload);
   }
 
   @UseGuards(AuthGuard())
@@ -50,7 +50,8 @@ export class UsersController {
   @UseGuards(AuthGuard())
   @Put(':id')
   async update(@Param('id') id: number, @Body() payload: UpdateUserPayload) {
-    return this.usersService.save(id, payload);
+    const data = { ...payload, id: +id };
+    return this.usersService.save(data);
   }
 
   @UseGuards(AuthGuard())

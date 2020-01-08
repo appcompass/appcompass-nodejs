@@ -3,9 +3,12 @@ import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
 import { IsSameAs } from '../validators/is-same-as.validator';
 import { IsEmailUsed } from '../validators/unique-email.validator';
 
-export class RegisterUserDto {
+export class ResetPasswordDto {
+  @IsString()
+  readonly code: string;
+
   @IsEmail()
-  @IsEmailUsed(false)
+  @IsEmailUsed(true)
   readonly email: string;
 
   @IsString()

@@ -14,9 +14,10 @@ import { UsersService } from '../services/users.service';
 @Injectable()
 export class IsEmailUsedValidator implements ValidatorConstraintInterface {
   constructor(protected readonly usersService: UsersService) {}
-  async validate(email: string) {
+  async validate(email: string, args: ValidationArguments) {
+    const isUsedCheck = args.constraints[0];
     const user = await this.usersService.findBy({ email });
-    return !user;
+    return isUsedCheck ? !!user : !user;
   }
 
   defaultMessage(args: ValidationArguments) {
@@ -24,13 +25,16 @@ export class IsEmailUsedValidator implements ValidatorConstraintInterface {
   }
 }
 
-export function IsEmailUsed(validationOptions?: ValidationOptions) {
+export function IsEmailUsed(
+  isUsedCheck: boolean,
+  validationOptions?: ValidationOptions
+) {
   return function(object: Object, propertyName: string) {
     registerDecorator({
       name: 'IsEmailUsed',
       target: object.constructor,
       propertyName: propertyName,
-      constraints: [],
+      constraints: [isUsedCheck],
       options: validationOptions,
       validator: IsEmailUsedValidator
     });
