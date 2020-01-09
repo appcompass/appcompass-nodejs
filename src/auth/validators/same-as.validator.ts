@@ -10,7 +10,7 @@ import { Injectable } from '@nestjs/common';
 
 @ValidatorConstraint({ name: 'isSameAs', async: false })
 @Injectable()
-export class IsSameAsValidator implements ValidatorConstraintInterface {
+export class SameAsValidator implements ValidatorConstraintInterface {
   validate(value: string, args: ValidationArguments) {
     const relatedValue = args.object[args.constraints[0]];
     return typeof value === typeof relatedValue && value === relatedValue;
@@ -32,7 +32,7 @@ export function IsSameAs(
       propertyName: propertyName,
       constraints: [property],
       options: validationOptions,
-      validator: IsSameAsValidator
+      validator: SameAsValidator
     });
   };
 }

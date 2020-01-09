@@ -12,7 +12,7 @@ import { UsersService } from '../services/users.service';
 
 @ValidatorConstraint({ name: 'isEmailUsed', async: true })
 @Injectable()
-export class IsEmailUsedValidator implements ValidatorConstraintInterface {
+export class EmailUsedValidator implements ValidatorConstraintInterface {
   constructor(protected readonly usersService: UsersService) {}
   async validate(email: string, args: ValidationArguments) {
     const isUsedCheck = args.constraints[0];
@@ -36,7 +36,7 @@ export function IsEmailUsed(
       propertyName: propertyName,
       constraints: [isUsedCheck],
       options: validationOptions,
-      validator: IsEmailUsedValidator
+      validator: EmailUsedValidator
     });
   };
 }

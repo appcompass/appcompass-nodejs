@@ -10,7 +10,7 @@ import { Injectable } from '@nestjs/common';
 
 @ValidatorConstraint({ name: 'isOrderQueryString', async: false })
 @Injectable()
-export class IsOrderQueryValidator implements ValidatorConstraintInterface {
+export class OrderQueryValidator implements ValidatorConstraintInterface {
   private pattern = /\w+:(?!asc|desc)\w+/gi;
 
   validate(value: string) {
@@ -33,7 +33,7 @@ export function IsOrderQueryString(validationOptions?: ValidationOptions) {
       propertyName: propertyName,
       constraints: [],
       options: validationOptions,
-      validator: IsOrderQueryValidator
+      validator: OrderQueryValidator
     });
   };
 }

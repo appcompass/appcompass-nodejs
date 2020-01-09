@@ -1,5 +1,3 @@
-import { IsOrderQueryValidator } from 'src/auth/validators/order-query-string.validator';
-
 import { Module } from '@nestjs/common';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
@@ -23,8 +21,10 @@ import { UsersService } from './services/users.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
 import { UserSubscriber } from './subscribers/user.subscriber';
-import { IsSameAsValidator } from './validators/is-same-as.validator';
-import { IsEmailUsedValidator } from './validators/unique-email.validator';
+import { OrderQueryValidator } from './validators/order-query-string.validator';
+import { RegistrationCodeValidator } from './validators/registration-code.validator';
+import { SameAsValidator } from './validators/same-as.validator';
+import { EmailUsedValidator } from './validators/unique-email.validator';
 
 @Module({
   imports: [
@@ -53,9 +53,10 @@ import { IsEmailUsedValidator } from './validators/unique-email.validator';
     RolesService,
     UsersService,
     UserSubscriber,
-    IsEmailUsedValidator,
-    IsSameAsValidator,
-    IsOrderQueryValidator
+    EmailUsedValidator,
+    SameAsValidator,
+    OrderQueryValidator,
+    RegistrationCodeValidator
   ],
   exports: [
     TypeOrmModule,

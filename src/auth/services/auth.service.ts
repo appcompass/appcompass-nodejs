@@ -22,11 +22,10 @@ export class AuthService {
   }
 
   async confirmRegistration(activationCode: string) {
-    const { id } = await this.usersService.findBy({ activationCode });
-    if (!id) throw Error('No user found by that activation code'); // TODO: Handle this error better.
-
+    const user = await this.usersService.findBy({ activationCode });
+    // TODO: email user confirmaiton activation.
     return await this.usersService.save({
-      id,
+      id: user.id,
       active: true,
       activatedAt: moment(),
       activationCode: ''
@@ -38,7 +37,7 @@ export class AuthService {
     // TODO: generate and store reset token
     // TODO: email user
     // TODO: return reset
-    return user;
+    return user.email;
   }
 
   async resetPassword({

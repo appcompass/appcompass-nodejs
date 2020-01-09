@@ -7,6 +7,7 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
+    "generate:secret": "clear && node -e \"console.log(require('crypto').randomBytes(256 / 8).toString('hex'))\"",
     "format": "eslint '*/**/*.{js,ts}' --quiet --fix",
     "start": "nest start",
     "start:dev": "nest start --watch",

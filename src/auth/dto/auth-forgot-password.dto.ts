@@ -1,6 +1,6 @@
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty } from 'class-validator';
 
-import { IsSameAs } from '../validators/is-same-as.validator';
+import { IsSameAs } from '../validators/same-as.validator';
 import { IsEmailUsed } from '../validators/unique-email.validator';
 
 export class ForgotPasswordDto {

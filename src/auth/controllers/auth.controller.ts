@@ -11,6 +11,7 @@ import {
 } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 
+import { ConfirmRegistrationDto } from '../dto/auth-confirm-registration.dto';
 import { ForgotPasswordDto } from '../dto/auth-forgot-password.dto';
 import { ResetPasswordDto } from '../dto/auth-reset-password.dto';
 import { AuthService } from '../services/auth.service';
@@ -37,7 +38,7 @@ export class AuthController {
   }
 
   @Get('confirm-registration')
-  async confirmRegistration(@Query('code') code: string) {
+  async confirmRegistration(@Query() { code }: ConfirmRegistrationDto) {
     return await this.authService.confirmRegistration(code);
   }
 
