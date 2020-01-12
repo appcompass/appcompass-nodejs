@@ -8,6 +8,7 @@ import {
   ValidationPipe
 } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { Transport } from '@nestjs/microservices';
 import {
   FastifyAdapter,
   NestFastifyApplication
@@ -39,6 +40,14 @@ async function bootstrap() {
     timeWindow: 1000 * 60 * 5
   });
 
+  app.connectMicroservice({
+    transport: Transport.REDIS,
+    options: {
+      url: 'redis://localhost:6379'
+    }
+  });
+
+  await app.startAllMicroservicesAsync();
   await app.listen(
     configService.get('SERVICE_PORT'),
     configService.get('SERVICE_HOST')

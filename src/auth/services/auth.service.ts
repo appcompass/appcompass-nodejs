@@ -1,6 +1,7 @@
 import * as bcrypt from 'bcrypt';
 import * as moment from 'moment';
 import { User } from 'src/auth/entities/user.entity';
+import { MessagingService } from 'src/messaging/messaging.service';
 
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -12,13 +13,29 @@ import { UsersService } from './users.service';
 export class AuthService {
   constructor(
     private readonly usersService: UsersService,
+    private readonly messagingService: MessagingService,
     private readonly jwtService: JwtService
   ) {}
 
   async register(data: Partial<User>) {
     const user = await this.usersService.save(data);
-    // TODO: Notify user
-    return { activationCode: user.activationCode };
+
+    // TODO: clean up this work a bit more. Hard coding is a no go.
+    await this.messagingService.sendAsync<any>('send_email', {
+      subject: 'Confirm Registration',
+      body: [
+        'Thank you for registering!',
+        'Please use the following link to confirm your email address:',
+        this.getConfirmationLink(user.activationCode)
+      ]
+    });
+
+    return { activationCode: user.activationCode, sentEmail: true };
+  }
+
+  // TODO: clean up this work a bit more along with above. Hard coding is a no go.
+  private getConfirmationLink(activationCode: string) {
+    return `http://127.0.0:3000/confirm-registration?code=${activationCode}`;
   }
 
   async confirmRegistration(activationCode: string) {

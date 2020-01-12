@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { ConfigService } from '../config/config.service';
 import { DBConfigService } from '../db/db-config.service';
+import { MessagingModule } from '../messaging/messaging.module';
 import { AuthConfigService } from './auth-config.service';
 import { AuthController } from './controllers/auth.controller';
 import { UsersController } from './controllers/users.controller';
@@ -36,6 +37,7 @@ import { EmailUsedValidator } from './validators/unique-email.validator';
       UserPermission,
       RolePermission
     ]),
+    MessagingModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({
       inject: [ConfigService],
