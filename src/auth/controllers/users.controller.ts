@@ -16,20 +16,18 @@ import { SortUserListQuery } from '../dto/user-list.dto';
 import { UpdateUserPayload } from '../dto/user-update.dto';
 import { UsersService } from '../services/users.service';
 
-@Controller({
-  path: 'users'
-})
+@Controller()
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @UseGuards(AuthGuard())
-  @Post()
+  @Post('users')
   async create(@Body() payload: CreateUserPayload) {
     return this.usersService.save(payload);
   }
 
   @UseGuards(AuthGuard())
-  @Get()
+  @Get('users')
   async list(@Query() query: SortUserListQuery) {
     const { skip, take, order } = query;
     // TODO: pull this out into a utility function. All list requests will have this option.
@@ -48,14 +46,14 @@ export class UsersController {
   }
 
   @UseGuards(AuthGuard())
-  @Put(':id')
+  @Put('users/:id')
   async update(@Param('id') id: number, @Body() payload: UpdateUserPayload) {
     const data = { ...payload, id: +id };
     return this.usersService.save(data);
   }
 
   @UseGuards(AuthGuard())
-  @Delete(':id')
+  @Delete('users/:id')
   async delete(@Param('id') id: number) {
     return this.usersService.delete(id);
   }
