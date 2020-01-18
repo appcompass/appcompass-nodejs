@@ -21,7 +21,7 @@ export class AuthService {
     const user = await this.usersService.save(data);
 
     // TODO: clean up this work a bit more. Hard coding is a no go.
-    await this.messagingService.sendAsync<any>('send_email', {
+    await this.messagingService.sendAsync<any>('notifier.send.email', {
       subject: 'Confirm Registration',
       body: [
         'Thank you for registering!',

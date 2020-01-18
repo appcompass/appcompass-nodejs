@@ -1,3 +1,5 @@
+import { ConfigService } from 'src/config/config.service';
+
 import { Injectable } from '@nestjs/common';
 import {
   ClientProxy,
@@ -8,11 +10,11 @@ import {
 @Injectable()
 export class MessagingService {
   private client: ClientProxy;
-  constructor() {
+  constructor(private configService: ConfigService) {
     this.client = ClientProxyFactory.create({
       transport: Transport.REDIS,
       options: {
-        url: 'redis://localhost:6379'
+        url: configService.get('REDIS_URL')
       }
     });
   }

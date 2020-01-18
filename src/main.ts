@@ -43,7 +43,7 @@ async function bootstrap() {
   app.connectMicroservice({
     transport: Transport.REDIS,
     options: {
-      url: 'redis://localhost:6379'
+      url: configService.get('REDIS_URL')
     }
   });
 
