@@ -55,6 +55,10 @@ export class DBNamingStrategy extends DefaultNamingStrategy
     return this.createNameFromTableColumns(tableOrName, columnNames, suffix);
   }
 
+  joinColumnName(relationName: string, referencedColumnName: string): string {
+    return snakeCase(`${relationName} ${referencedColumnName}`);
+  }
+
   private createNameFromTableColumns(
     tableOrName: Table | string,
     columnNames: string[],

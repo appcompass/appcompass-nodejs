@@ -33,7 +33,8 @@ export class Role {
 
   @ManyToOne(
     () => Permission,
-    permission => permission.assignableRoles
+    permission => permission.assignableRoles,
+    { onDelete: 'CASCADE' }
   )
   @JoinColumn({ name: 'assignable_by_id' })
   public assignableBy: Permission;

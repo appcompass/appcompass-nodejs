@@ -17,13 +17,15 @@ export class UserRole {
 
   @ManyToOne(
     () => User,
-    user => user.userToRoles
+    user => user.userToRoles,
+    { onDelete: 'CASCADE' }
   )
   public user!: User;
 
   @ManyToOne(
     () => Role,
-    role => role.roleToUsers
+    role => role.roleToUsers,
+    { onDelete: 'CASCADE' }
   )
   public role!: Role;
 }

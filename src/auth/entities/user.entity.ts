@@ -3,6 +3,7 @@ import { DateTransformer } from 'src/db/transformers/date.transformer';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 import { CreatedUpdatedDates } from '../../db/embeded-entities/created-updated-dates';
+import { UserLogin } from './user-login.entity';
 import { UserPermission } from './user-permission.entity';
 import { UserRole } from './user-role.entity';
 
@@ -44,6 +45,12 @@ export class User {
 
   @Column(() => CreatedUpdatedDates, { prefix: '' })
   public at: CreatedUpdatedDates;
+
+  @OneToMany(
+    () => UserLogin,
+    logins => logins.user
+  )
+  public logins: UserLogin[];
 
   @OneToMany(
     () => UserPermission,

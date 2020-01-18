@@ -1,3 +1,4 @@
+import { UserLogin } from 'src/auth/entities/user-login.entity';
 import { ConnectionOptions } from 'typeorm';
 
 import { Injectable } from '@nestjs/common';
@@ -12,17 +13,18 @@ import { User } from '../auth/entities/user.entity';
 import { ConfigService } from '../config/config.service';
 import { DBNamingStrategy } from './naming.strategy';
 
+export const entities: Function[] = [
+  User,
+  Role,
+  Permission,
+  UserLogin,
+  UserRole,
+  UserPermission,
+  RolePermission
+];
+
 @Injectable()
 export class DBConfigService implements TypeOrmOptionsFactory {
-  private entities: Function[] = [
-    User,
-    Role,
-    Permission,
-    UserRole,
-    UserPermission,
-    RolePermission
-  ];
-
   constructor(private readonly configService: ConfigService) {}
 
   createTypeOrmOptions(): TypeOrmModuleOptions {
@@ -42,8 +44,9 @@ export class DBConfigService implements TypeOrmOptionsFactory {
       password: this.configService.get('DB_PASSWORD'),
       database: this.configService.get('DB_NAME'),
       synchronize: this.configService.get('DB_SYNCHRONIZE'),
+      migrationsRun: this.configService.get('DB_SYNCHRONIZE'),
       namingStrategy: new DBNamingStrategy(),
-      entities: this.entities,
+      entities,
       migrations: [`${__dirname}/migrations/*{.js,.ts}`],
       cli: {
         entitiesDir: 'src/db/entities',

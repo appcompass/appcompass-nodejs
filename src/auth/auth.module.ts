@@ -4,17 +4,11 @@ import { PassportModule } from '@nestjs/passport';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { ConfigService } from '../config/config.service';
-import { DBConfigService } from '../db/db-config.service';
+import { DBConfigService, entities } from '../db/db-config.service';
 import { MessagingModule } from '../messaging/messaging.module';
 import { AuthConfigService } from './auth-config.service';
 import { AuthController } from './controllers/auth.controller';
 import { UsersController } from './controllers/users.controller';
-import { Permission } from './entities/permission.entity';
-import { RolePermission } from './entities/role-permission.entity';
-import { Role } from './entities/role.entity';
-import { UserPermission } from './entities/user-permission.entity';
-import { UserRole } from './entities/user-role.entity';
-import { User } from './entities/user.entity';
 import { AuthService } from './services/auth.service';
 import { PermissionsService } from './services/permissions.service';
 import { RolesService } from './services/roles.service';
@@ -29,14 +23,7 @@ import { EmailUsedValidator } from './validators/unique-email.validator';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([
-      User,
-      Role,
-      Permission,
-      UserRole,
-      UserPermission,
-      RolePermission
-    ]),
+    TypeOrmModule.forFeature(entities),
     MessagingModule,
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.registerAsync({

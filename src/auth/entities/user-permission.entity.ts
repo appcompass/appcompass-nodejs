@@ -14,13 +14,15 @@ export class UserPermission {
 
   @ManyToOne(
     () => User,
-    user => user.userToPermissions
+    user => user.userToPermissions,
+    { onDelete: 'CASCADE' }
   )
   public user!: User;
 
   @ManyToOne(
     () => Permission,
-    permission => permission.permissionToUsers
+    permission => permission.permissionToUsers,
+    { onDelete: 'CASCADE' }
   )
   public permission!: Permission;
 

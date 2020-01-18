@@ -2,7 +2,6 @@ import {
   Column,
   Entity,
   JoinColumn,
-  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn
@@ -12,7 +11,6 @@ import { CreatedUpdatedDates } from '../../db/embeded-entities/created-updated-d
 import { RolePermission } from './role-permission.entity';
 import { Role } from './role.entity';
 import { UserPermission } from './user-permission.entity';
-import { User } from './user.entity';
 
 @Entity('permissions')
 export class Permission {
@@ -38,7 +36,8 @@ export class Permission {
 
   @ManyToOne(
     () => Permission,
-    permission => permission.assignablePermissions
+    permission => permission.assignablePermissions,
+    { onDelete: 'CASCADE' }
   )
   @JoinColumn({ name: 'assignable_by_id' })
   public assignableBy: Permission;
