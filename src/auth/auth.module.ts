@@ -15,7 +15,6 @@ import { RolesService } from './services/roles.service';
 import { UsersService } from './services/users.service';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { LocalStrategy } from './strategies/local.strategy';
-import { UserSubscriber } from './subscribers/user.subscriber';
 import { OrderQueryValidator } from './validators/order-query-string.validator';
 import { RegistrationCodeValidator } from './validators/registration-code.validator';
 import { SameAsValidator } from './validators/same-as.validator';
@@ -41,7 +40,6 @@ import { EmailUsedValidator } from './validators/unique-email.validator';
     PermissionsService,
     RolesService,
     UsersService,
-    UserSubscriber,
     EmailUsedValidator,
     SameAsValidator,
     OrderQueryValidator,

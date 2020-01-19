@@ -14,11 +14,15 @@ import { AuthGuard } from '@nestjs/passport';
 import { CreateUserPayload } from '../dto/user-create.dto';
 import { SortUserListQuery } from '../dto/user-list.dto';
 import { UpdateUserPayload } from '../dto/user-update.dto';
+import { AuthService } from '../services/auth.service';
 import { UsersService } from '../services/users.service';
 
 @Controller()
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly usersService: UsersService
+  ) {}
 
   @UseGuards(AuthGuard())
   @Post('users')
@@ -48,8 +52,10 @@ export class UsersController {
   @UseGuards(AuthGuard())
   @Put('users/:id')
   async update(@Param('id') id: number, @Body() payload: UpdateUserPayload) {
-    const data = { ...payload, id: +id };
-    return this.usersService.save(data);
+    const password = payload.password
+      ? await this.authService.setPassword(payload.password)
+      : undefined;
+    return this.usersService.update(id, { ...payload, password });
   }
 
   @UseGuards(AuthGuard())
