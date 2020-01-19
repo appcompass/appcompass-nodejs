@@ -27,7 +27,7 @@ export class UsersController {
   @UseGuards(AuthGuard())
   @Post('users')
   async create(@Body() payload: CreateUserPayload) {
-    return this.usersService.save(payload);
+    return this.usersService.create(payload);
   }
 
   @UseGuards(AuthGuard())

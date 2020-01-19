@@ -30,12 +30,11 @@ export class AuthService {
 
     const password = await this.setPassword(data.password);
 
-    await this.usersService.save({
+    await this.usersService.create({
       email: data.email,
       password,
       activationCode
     });
-
     // TODO: clean up this work a bit more. Hard coding is a no go.
     await this.messagingService.sendAsync<any>('notifier.send.email', {
       subject: 'Confirm Registration',

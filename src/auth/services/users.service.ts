@@ -30,25 +30,35 @@ export class UsersService {
     return await this.userRepository.save(data);
   }
 
-  async update(id: number, data: Partial<User>) {
-    return await this.connection.transaction(() =>
-      this.connection
-        .createQueryBuilder()
-        .update(User)
-        .set(data)
-        .where('id = :id', { id })
-        .execute()
+  async create(data: Partial<User>) {
+    return await this.connection.transaction(
+      async entityManager => await entityManager.insert(User, data)
     );
   }
 
+  async update(id: number, data: Partial<User>) {
+    const { affected } = await this.connection.transaction(
+      async entityManager =>
+        await entityManager
+          .createQueryBuilder()
+          .update(User)
+          .set(data)
+          .where('id = :id', { id })
+          .execute()
+    );
+
+    return { affected };
+  }
+
   async delete(id: number) {
-    const { affected } = await this.connection.transaction(() =>
-      this.connection
-        .createQueryBuilder()
-        .delete()
-        .from(User)
-        .where('id = :id', { id })
-        .execute()
+    const { affected } = await this.connection.transaction(
+      async entityManager =>
+        await entityManager
+          .createQueryBuilder()
+          .delete()
+          .from(User)
+          .where('id = :id', { id })
+          .execute()
     );
 
     return { affected };
