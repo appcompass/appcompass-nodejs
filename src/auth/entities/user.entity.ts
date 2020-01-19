@@ -43,6 +43,13 @@ export class User {
   })
   public lastLogin: Moment;
 
+  @Column({
+    type: 'timestamp',
+    nullable: true,
+    transformer: new DateTransformer()
+  })
+  public tokenExpiration: Moment;
+
   @Column(() => CreatedUpdatedDates, { prefix: '' })
   public at: CreatedUpdatedDates;
 

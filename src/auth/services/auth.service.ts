@@ -7,6 +7,7 @@ import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
 import { ResetPasswordDto } from '../dto/auth-reset-password.dto';
+import { DecodedToken } from '../types/token';
 import { UsersService } from './users.service';
 
 @Injectable()
@@ -79,13 +80,23 @@ export class AuthService {
     const { id, email } = user;
     const payload = { email, sub: id };
     const token = await this.jwtService.signAsync(payload);
+    const decoded = this.jwtService.decode(token) as DecodedToken;
 
-    await this.usersService.save({ id, lastLogin: moment() });
+    await this.usersService.save({
+      id,
+      lastLogin: moment(),
+      tokenExpiration: moment.unix(decoded.exp)
+    });
 
     return { token };
   }
 
   async logout(user: User) {
-    user; // TODO: handle logout flow.  blacklist maybe?
+    await this.usersService.save({
+      id: user.id,
+      tokenExpiration: moment()
+    });
+
+    return { success: true };
   }
 }
