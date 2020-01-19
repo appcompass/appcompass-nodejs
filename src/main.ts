@@ -3,11 +3,12 @@ import * as rateLimit from 'fastify-rate-limit';
 import * as helmet from 'helmet';
 
 import {
+  ClassSerializerInterceptor,
   UnprocessableEntityException,
   ValidationError,
   ValidationPipe
 } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
+import { NestFactory, Reflector } from '@nestjs/core';
 import { Transport } from '@nestjs/microservices';
 import {
   FastifyAdapter,
@@ -33,6 +34,9 @@ async function bootstrap() {
         new UnprocessableEntityException(errors, 'Validation Error')
     })
   );
+
+  app.useGlobalInterceptors(new ClassSerializerInterceptor(app.get(Reflector)));
+
   app.enableCors();
   app.use(helmet());
   app.register(rateLimit, {

@@ -1,8 +1,15 @@
+import { Exclude, Transform } from 'class-transformer';
 import { Moment } from 'moment';
 import { DateTransformer } from 'src/db/transformers/date.transformer';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn
+} from 'typeorm';
 
-import { CreatedUpdatedDates } from '../../db/embeded-entities/created-updated-dates';
 import { UserLogin } from './user-login.entity';
 import { UserPermission } from './user-permission.entity';
 import { UserRole } from './user-role.entity';
@@ -20,15 +27,18 @@ export class User {
   })
   public email: string;
 
+  @Exclude()
   @Column({ type: 'varchar', length: 255, nullable: false })
   public password: string;
 
   @Column({ type: 'boolean', default: false, nullable: false })
   public active: boolean;
 
+  @Exclude()
   @Column({ type: 'varchar', length: 64 })
   public activationCode: string;
 
+  @Transform(activatedAt => activatedAt?.format() || null)
   @Column({
     type: 'timestamp',
     nullable: true,
@@ -36,6 +46,7 @@ export class User {
   })
   public activatedAt: Moment;
 
+  @Transform(lastLogin => lastLogin?.format() || null)
   @Column({
     type: 'timestamp',
     nullable: true,
@@ -43,6 +54,7 @@ export class User {
   })
   public lastLogin: Moment;
 
+  @Exclude()
   @Column({
     type: 'timestamp',
     nullable: true,
@@ -50,8 +62,13 @@ export class User {
   })
   public tokenExpiration: Moment;
 
-  @Column(() => CreatedUpdatedDates, { prefix: '' })
-  public at: CreatedUpdatedDates;
+  @Transform(created => created?.format() || null)
+  @CreateDateColumn({ transformer: new DateTransformer() })
+  createdAt: Moment;
+
+  @Transform(updated => updated?.format() || null)
+  @UpdateDateColumn({ transformer: new DateTransformer() })
+  updatedAt: Moment;
 
   @OneToMany(
     () => UserLogin,

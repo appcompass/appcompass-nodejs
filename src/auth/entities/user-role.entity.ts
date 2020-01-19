@@ -1,6 +1,14 @@
-import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Transform } from 'class-transformer';
+import { Moment } from 'moment';
+import { DateTransformer } from 'src/db/transformers/date.transformer';
+import {
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryColumn,
+  UpdateDateColumn
+} from 'typeorm';
 
-import { CreatedUpdatedDates } from '../../db/embeded-entities/created-updated-dates';
 import { Role } from './role.entity';
 import { User } from './user.entity';
 
@@ -12,8 +20,13 @@ export class UserRole {
   @PrimaryColumn()
   public roleId: number;
 
-  @Column(() => CreatedUpdatedDates, { prefix: '' })
-  public at: CreatedUpdatedDates;
+  @Transform(created => created?.format() || null)
+  @CreateDateColumn({ transformer: new DateTransformer() })
+  createdAt: Moment;
+
+  @Transform(updated => updated?.format() || null)
+  @UpdateDateColumn({ transformer: new DateTransformer() })
+  updatedAt: Moment;
 
   @ManyToOne(
     () => User,

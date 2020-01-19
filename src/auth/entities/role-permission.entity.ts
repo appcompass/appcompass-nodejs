@@ -1,6 +1,14 @@
-import { Column, Entity, ManyToOne, PrimaryColumn } from 'typeorm';
+import { Transform } from 'class-transformer';
+import { Moment } from 'moment';
+import { DateTransformer } from 'src/db/transformers/date.transformer';
+import {
+  CreateDateColumn,
+  Entity,
+  ManyToOne,
+  PrimaryColumn,
+  UpdateDateColumn
+} from 'typeorm';
 
-import { CreatedUpdatedDates } from '../../db/embeded-entities/created-updated-dates';
 import { Permission } from './permission.entity';
 import { Role } from './role.entity';
 
@@ -11,6 +19,14 @@ export class RolePermission {
 
   @PrimaryColumn()
   public permissionId: number;
+
+  @Transform(created => created?.format() || null)
+  @CreateDateColumn({ transformer: new DateTransformer() })
+  createdAt: Moment;
+
+  @Transform(updated => updated?.format() || null)
+  @UpdateDateColumn({ transformer: new DateTransformer() })
+  updatedAt: Moment;
 
   @ManyToOne(
     () => Role,
@@ -25,7 +41,4 @@ export class RolePermission {
     { onDelete: 'CASCADE' }
   )
   public permission!: Permission;
-
-  @Column(() => CreatedUpdatedDates, { prefix: '' })
-  public at: CreatedUpdatedDates;
 }

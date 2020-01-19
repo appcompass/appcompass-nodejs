@@ -1,13 +1,17 @@
+import { Transform } from 'class-transformer';
+import { Moment } from 'moment';
+import { DateTransformer } from 'src/db/transformers/date.transformer';
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   OneToMany,
-  PrimaryGeneratedColumn
+  PrimaryGeneratedColumn,
+  UpdateDateColumn
 } from 'typeorm';
 
-import { CreatedUpdatedDates } from '../../db/embeded-entities/created-updated-dates';
 import { RolePermission } from './role-permission.entity';
 import { Role } from './role.entity';
 import { UserPermission } from './user-permission.entity';
@@ -33,6 +37,14 @@ export class Permission {
 
   @Column({ type: 'boolean', default: false, nullable: false })
   public system: number;
+
+  @Transform(created => created?.format() || null)
+  @CreateDateColumn({ transformer: new DateTransformer() })
+  createdAt: Moment;
+
+  @Transform(updated => updated?.format() || null)
+  @UpdateDateColumn({ transformer: new DateTransformer() })
+  updatedAt: Moment;
 
   @ManyToOne(
     () => Permission,
@@ -65,7 +77,4 @@ export class Permission {
     rolePermission => rolePermission.permission
   )
   public permissionToRoles: RolePermission[];
-
-  @Column(() => CreatedUpdatedDates, { prefix: '' })
-  public at: CreatedUpdatedDates;
 }

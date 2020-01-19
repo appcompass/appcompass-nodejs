@@ -1,3 +1,4 @@
+import { Transform } from 'class-transformer';
 import { Moment } from 'moment';
 import { DateTransformer } from 'src/db/transformers/date.transformer';
 import {
@@ -14,6 +15,7 @@ export class UserLogin {
   @PrimaryGeneratedColumn()
   public id: number;
 
+  @Transform(loginAt => loginAt?.format() || null)
   @CreateDateColumn({ name: 'login_at', transformer: new DateTransformer() })
   loginAt: Moment;
 
