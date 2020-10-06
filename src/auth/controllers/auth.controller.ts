@@ -1,5 +1,3 @@
-import { RegisterUserDto } from 'src/auth/dto/auth-register.dto';
-
 import {
   Body,
   Controller,
@@ -13,6 +11,7 @@ import { AuthGuard } from '@nestjs/passport';
 
 import { ConfirmRegistrationDto } from '../dto/auth-confirm-registration.dto';
 import { ForgotPasswordDto } from '../dto/auth-forgot-password.dto';
+import { RegisterUserDto } from '../dto/auth-register.dto';
 import { ResetPasswordDto } from '../dto/auth-reset-password.dto';
 import { AuthService } from '../services/auth.service';
 

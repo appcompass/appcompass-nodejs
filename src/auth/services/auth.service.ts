@@ -1,14 +1,14 @@
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
 import * as moment from 'moment';
-import { User } from 'src/auth/entities/user.entity';
-import { MessagingService } from 'src/messaging/messaging.service';
 
 import { Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 
+import { MessagingService } from '../../messaging/messaging.service';
 import { RegisterUserDto } from '../dto/auth-register.dto';
 import { ResetPasswordDto } from '../dto/auth-reset-password.dto';
+import { User } from '../entities/user.entity';
 import { DecodedToken } from '../types/token';
 import { UsersService } from './users.service';
 

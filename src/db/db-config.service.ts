@@ -1,4 +1,3 @@
-import { UserLogin } from 'src/auth/entities/user-login.entity';
 import { ConnectionOptions } from 'typeorm';
 
 import { Injectable } from '@nestjs/common';
@@ -7,6 +6,7 @@ import { TypeOrmModuleOptions, TypeOrmOptionsFactory } from '@nestjs/typeorm';
 import { Permission } from '../auth/entities/permission.entity';
 import { RolePermission } from '../auth/entities/role-permission.entity';
 import { Role } from '../auth/entities/role.entity';
+import { UserLogin } from '../auth/entities/user-login.entity';
 import { UserPermission } from '../auth/entities/user-permission.entity';
 import { UserRole } from '../auth/entities/user-role.entity';
 import { User } from '../auth/entities/user.entity';
@@ -49,9 +49,9 @@ export class DBConfigService implements TypeOrmOptionsFactory {
       entities,
       migrations: [`${__dirname}/migrations/*{.js,.ts}`],
       cli: {
-        entitiesDir: 'src/db/entities',
-        migrationsDir: 'src/db/migrations',
-        subscribersDir: 'src/db/subscribers'
+        entitiesDir: './entities',
+        migrationsDir: './migrations',
+        subscribersDir: './subscribers'
       }
     } as ConnectionOptions;
   }
